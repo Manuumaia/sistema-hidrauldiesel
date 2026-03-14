@@ -9,7 +9,7 @@ const USUARIOS = [
 
 // ── Redirecionamento se já estiver logado ──
 if (sessionStorage.getItem('hd_user')) {
-  window.location.replace('hd-dashboard.html');
+  window.location.replace('../dashboard/');
 }
 
 // ── Referências DOM ──
@@ -54,7 +54,7 @@ form.addEventListener('submit', function (e) {
 
     if (usuario) {
       sessionStorage.setItem('hd_user', JSON.stringify({ name: usuario.name, username: usuario.username }));
-      const redirect = sessionStorage.getItem('hd_redirect') || 'hd-dashboard.html';
+      const redirect = sessionStorage.getItem('hd_redirect') || '../dashboard/';
       sessionStorage.removeItem('hd_redirect');
       window.location.replace(redirect);
     } else {

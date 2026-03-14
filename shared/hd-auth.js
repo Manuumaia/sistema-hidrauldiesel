@@ -5,7 +5,7 @@
   const raw = sessionStorage.getItem('hd_user');
   if (!raw) {
     sessionStorage.setItem('hd_redirect', window.location.href);
-    window.location.replace('hd-login.html');
+    window.location.replace('../login/');
     return;
   }
 
@@ -43,6 +43,6 @@
 
   window.hdLogout = function () {
     sessionStorage.removeItem('hd_user');
-    window.location.href = 'hd-login.html';
+    window.location.href = '../login/';
   };
 })();
