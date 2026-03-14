@@ -1,0 +1,477 @@
+/* =============================================
+   HidrauDiesel — Mecânicos
+   hd-mecanicos.css
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap');
+
+/* --- RESET & ROOT ---------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F4F3F0;
+  --surface: #FFFFFF;
+  --border: #E3E1DA;
+  --text: #12151F;
+  --muted: #888680;
+  --navy: #1B2D5B;
+  --navy2: #243672;
+  --red: #C0152A;
+  --red2: #E01830;
+  --aberta: #D97706;
+  --aberta-bg: #FEF3C7;
+  --andamento: #1B5FBF;
+  --andamento-bg: #DBEAFE;
+  --concluida: #16A34A;
+  --concluida-bg: #DCFCE7;
+  --orcamento: #7C3AED;
+  --orcamento-bg: #EDE9FE;
+  --radius: 10px;
+  --font: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+
+/* --- BASE ------------------------------------------------- */
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* --- SIDEBAR ---------------------------------------------- */
+aside {
+  width: 228px;
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 18px 24px;
+  flex-shrink: 0;
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.logo-img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.logo-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 20px 0;
+}
+
+/* --- NAV -------------------------------------------------- */
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 7px;
+  text-decoration: none;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+}
+
+nav a:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+nav a.active {
+  background: var(--red);
+  color: #fff;
+  font-weight: 500;
+}
+
+nav a svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+nav a.active svg {
+  opacity: 1;
+}
+
+.nav-section {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.22);
+  text-transform: uppercase;
+  padding: 18px 12px 5px;
+}
+
+/* --- SIDEBAR BOTTOM --------------------------------------- */
+.sidebar-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 14px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.sidebar-bottom strong {
+  display: block;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+/* --- MAIN ------------------------------------------------- */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* --- HEADER ----------------------------------------------- */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 15px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.page-title {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.page-date {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- BUTTONS ---------------------------------------------- */
+.btn {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.12s;
+}
+
+.btn:hover {
+  background: var(--bg);
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+.btn-primary:hover {
+  background: var(--red2);
+  border-color: var(--red2);
+}
+
+/* --- CONTENT AREA ----------------------------------------- */
+.content {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* --- KPI CARDS -------------------------------------------- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.kpi-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.kpi-sub {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* =============================================
+   MECHANIC-SPECIFIC STYLES
+   ============================================= */
+
+/* --- MECHANICS GRID --------------------------------------- */
+.mec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* --- MECHANIC CARD ---------------------------------------- */
+.mec-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: box-shadow 0.15s;
+}
+
+.mec-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.mec-card--inactive {
+  opacity: 0.8;
+}
+
+.mec-card--new {
+  border-style: dashed;
+  border-color: var(--andamento);
+  background: var(--andamento-bg);
+}
+
+/* --- CARD TOP ROW ----------------------------------------- */
+.mec-card-top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+/* --- AVATAR ----------------------------------------------- */
+.mec-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* --- NAME & SPECIALTY ------------------------------------- */
+.mec-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.mec-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mec-tag {
+  display: inline-block;
+  background: var(--navy);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+/* --- STATUS BADGES ---------------------------------------- */
+.badge {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.badge-ativo {
+  background: var(--concluida-bg);
+  color: var(--concluida);
+}
+
+.badge-ferias {
+  background: var(--aberta-bg);
+  color: var(--aberta);
+}
+
+.badge-novo {
+  background: var(--andamento-bg);
+  color: var(--andamento);
+}
+
+/* --- STATS ROW -------------------------------------------- */
+.mec-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.mec-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mec-stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  color: var(--text);
+}
+
+.mec-stat-label {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --- PERFORMANCE BAR -------------------------------------- */
+.mec-perf {
+  margin-top: 14px;
+}
+
+.mec-perf-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.mec-perf-pct {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+}
+
+.mec-perf-bar {
+  height: 5px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.mec-perf-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+/* --- RESPONSIVE ------------------------------------------- */
+@media (max-width: 1100px) {
+  .mec-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  aside {
+    display: none;
+  }
+
+  .mec-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .content {
+    padding: 16px;
+  }
+
+  header {
+    padding: 12px 16px;
+  }
+}
+
+  /* Botão Sincronizar Bling */
+  .btn-sync { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.75); font-family: var(--font); font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s, color .15s; text-align: left; }
+  .btn-sync:hover { background: rgba(255,255,255,0.14); color: #fff; }
+  .btn-sync svg { width: 16px; height: 16px; flex-shrink: 0; opacity: 0.7; }
+  .btn-sync:hover svg { opacity: 1; }

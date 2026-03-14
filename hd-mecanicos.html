@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mecânicos — HidrauDiesel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="hd-mecanicos.css" />
+  <script src="hd-auth.js"></script>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="logo-wrap">
+      <img class="logo-img" src="imagens/Design sem nome (6).png" alt="HidrauDiesel Logo" />
+    </div>
+    <div class="logo-divider"></div>
+
+    <nav>
+    <a href="hd-dashboard.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="hd-lista-os.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Ordens de serviço
+    </a>
+    <a href="hd-clientes.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Clientes
+    </a>
+    <a href="hd-estoque.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Estoque
+    </a>
+    <a href="hd-servicos.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      Serviços
+    </a>
+    <a href="hd-mecanicos.html" class="active">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Mecânicos
+    </a>
+    <a href="hd-comissionamento.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Comissionamento
+    </a>
+    <div class="nav-section">Integração</div>
+    <button class="btn-sync" onclick="sincronizarBling()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      Sincronizar com Bling
+    </button>
+  </nav>
+
+    <div class="sidebar-bottom">
+      <strong>HidrauDiesel</strong>
+      Sistema de gestão v1.0
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <header>
+      <div class="header-left">
+        <span class="page-title">Mecânicos</span>
+        <span class="page-date" id="page-date"></span>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Novo mecânico
+        </button>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- KPI CARDS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total de mecânicos</div>
+          <div class="kpi-value">5</div>
+          <div class="kpi-sub">4 ativos · 1 em férias</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">OS abertas hoje</div>
+          <div class="kpi-value" style="color: var(--aberta);">8</div>
+          <div class="kpi-sub">em andamento</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">OS concluídas no mês</div>
+          <div class="kpi-value" style="color: var(--concluida);">97</div>
+          <div class="kpi-sub">março 2026</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Faturamento gerado</div>
+          <div class="kpi-value" style="font-family: var(--mono); color: var(--navy);">R$&nbsp;74,2k</div>
+          <div class="kpi-sub">acumulado no mês</div>
+        </div>
+      </div>
+
+      <!-- MECHANICS GRID -->
+      <div class="mec-grid">
+
+        <!-- André Lima -->
+        <div class="mec-card">
+          <div class="mec-card-top">
+            <div class="mec-avatar" style="background: #1B5FBF;">AL</div>
+            <div class="mec-info">
+              <div class="mec-name">André Lima</div>
+              <span class="mec-tag">Suspensão / Freios</span>
+            </div>
+            <span class="badge badge-ativo">Ativo</span>
+          </div>
+          <div class="mec-stats">
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--aberta);">3</span>
+              <span class="mec-stat-label">OS Abertas</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--concluida);">38</span>
+              <span class="mec-stat-label">Concluídas (mês)</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="font-family: var(--mono);">R$29,8k</span>
+              <span class="mec-stat-label">Faturamento</span>
+            </div>
+          </div>
+          <div class="mec-perf">
+            <div class="mec-perf-label">
+              <span>Performance mês</span>
+              <span class="mec-perf-pct">100%</span>
+            </div>
+            <div class="mec-perf-bar">
+              <div class="mec-perf-fill" style="width: 100%; background: var(--concluida);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- João Silva -->
+        <div class="mec-card">
+          <div class="mec-card-top">
+            <div class="mec-avatar" style="background: #7C3AED;">JS</div>
+            <div class="mec-info">
+              <div class="mec-name">João Silva</div>
+              <span class="mec-tag">Elétrica / Injeção</span>
+            </div>
+            <span class="badge badge-ativo">Ativo</span>
+          </div>
+          <div class="mec-stats">
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--aberta);">2</span>
+              <span class="mec-stat-label">OS Abertas</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--concluida);">31</span>
+              <span class="mec-stat-label">Concluídas (mês)</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="font-family: var(--mono);">R$22,4k</span>
+              <span class="mec-stat-label">Faturamento</span>
+            </div>
+          </div>
+          <div class="mec-perf">
+            <div class="mec-perf-label">
+              <span>Performance mês</span>
+              <span class="mec-perf-pct">82%</span>
+            </div>
+            <div class="mec-perf-bar">
+              <div class="mec-perf-fill" style="width: 82%; background: var(--concluida);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pedro Rocha -->
+        <div class="mec-card">
+          <div class="mec-card-top">
+            <div class="mec-avatar" style="background: #0E7490;">PR</div>
+            <div class="mec-info">
+              <div class="mec-name">Pedro Rocha</div>
+              <span class="mec-tag">Motor / Câmbio</span>
+            </div>
+            <span class="badge badge-ativo">Ativo</span>
+          </div>
+          <div class="mec-stats">
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--aberta);">2</span>
+              <span class="mec-stat-label">OS Abertas</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--concluida);">18</span>
+              <span class="mec-stat-label">Concluídas (mês)</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="font-family: var(--mono);">R$14,3k</span>
+              <span class="mec-stat-label">Faturamento</span>
+            </div>
+          </div>
+          <div class="mec-perf">
+            <div class="mec-perf-label">
+              <span>Performance mês</span>
+              <span class="mec-perf-pct">47%</span>
+            </div>
+            <div class="mec-perf-bar">
+              <div class="mec-perf-fill" style="width: 47%; background: var(--aberta);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carlos Andrade -->
+        <div class="mec-card mec-card--inactive">
+          <div class="mec-card-top">
+            <div class="mec-avatar" style="background: #92400E;">CA</div>
+            <div class="mec-info">
+              <div class="mec-name">Carlos Andrade</div>
+              <span class="mec-tag">Geral</span>
+            </div>
+            <span class="badge badge-ferias">Férias</span>
+          </div>
+          <div class="mec-stats">
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--muted);">1</span>
+              <span class="mec-stat-label">OS Abertas</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--muted);">10</span>
+              <span class="mec-stat-label">Concluídas (mês)</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="font-family: var(--mono); color: var(--muted);">R$7,7k</span>
+              <span class="mec-stat-label">Faturamento</span>
+            </div>
+          </div>
+          <div class="mec-perf">
+            <div class="mec-perf-label">
+              <span>Performance mês</span>
+              <span class="mec-perf-pct">26%</span>
+            </div>
+            <div class="mec-perf-bar">
+              <div class="mec-perf-fill" style="width: 26%; background: var(--muted);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Marcos Teles -->
+        <div class="mec-card mec-card--new">
+          <div class="mec-card-top">
+            <div class="mec-avatar" style="background: #1B2D5B;">MT</div>
+            <div class="mec-info">
+              <div class="mec-name">Marcos Teles</div>
+              <span class="mec-tag">Hidráulica / Diesel</span>
+            </div>
+            <span class="badge badge-novo">Novo</span>
+          </div>
+          <div class="mec-stats">
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--muted);">0</span>
+              <span class="mec-stat-label">OS Abertas</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="color: var(--muted);">0</span>
+              <span class="mec-stat-label">Concluídas (mês)</span>
+            </div>
+            <div class="mec-stat">
+              <span class="mec-stat-value" style="font-family: var(--mono); color: var(--muted);">R$0</span>
+              <span class="mec-stat-label">Faturamento</span>
+            </div>
+          </div>
+          <div class="mec-perf">
+            <div class="mec-perf-label">
+              <span>Performance mês</span>
+              <span class="mec-perf-pct">—</span>
+            </div>
+            <div class="mec-perf-bar">
+              <div class="mec-perf-fill" style="width: 0%; background: var(--andamento);"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.mec-grid -->
+    </div><!-- /.content -->
+  </main>
+
+  <script src="hd-mecanicos.js"></script>
+</body>
+</html>

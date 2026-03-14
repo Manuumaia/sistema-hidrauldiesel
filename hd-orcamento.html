@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hidrauldiesel — Orçamento #ORC-0031</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="hd-orcamento.css">
+<script src="hd-auth.js"></script>
+</head>
+<body>
+
+<!-- ═══ PRINT HEADER (visível só na impressão) ═══ -->
+<div class="print-header" style="display:none">
+  <div class="print-logo-area">
+    <img src="imagens/Design sem nome (6).png" alt="">
+    <div class="print-company">Hidrauldiesel<small>Oficina Mecânica · (41) 3333-4444</small></div>
+  </div>
+  <div class="print-os-info">
+    <div class="print-os-num" id="print-os-num">#ORC-0031</div>
+    <div class="print-os-meta" id="print-os-meta">Emitido em 12/03/2026</div>
+    <span class="print-version-badge" id="print-version-badge"></span>
+  </div>
+</div>
+
+<aside>
+  <div class="logo-wrap">
+    <img src="imagens/Design sem nome (6).png" alt="" class="logo-img">
+  </div>
+  <div class="logo-divider"></div>
+  <nav>
+    <a href="hd-dashboard.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="hd-lista-os.html" class="active">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      Ordens de serviço
+    </a>
+    <a href="hd-clientes.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Clientes
+    </a>
+    <a href="hd-estoque.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+      Estoque
+    </a>
+    <a href="hd-servicos.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+      Serviços
+    </a>
+    <a href="hd-mecanicos.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Mecânicos
+    </a>
+    <a href="hd-comissionamento.html">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Comissionamento
+    </a>
+    <div class="nav-section">Integração</div>
+    <button class="btn-sync" onclick="sincronizarBling()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      Sincronizar com Bling
+    </button>
+  </nav>
+  <div class="sidebar-bottom"><strong>João Mecânico</strong>Hidrauldiesel</div>
+</aside>
+
+<main>
+  <!-- HEADER -->
+  <header>
+    <button class="back-btn"><svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>Voltar</button>
+    <span class="header-breadcrumb">Ordens de serviço <span>/ Novo orçamento</span></span>
+    <div class="header-right">
+      <span class="header-num">#ORC-0031</span>
+      <!-- Botão imprimir -->
+      <div class="print-menu-wrap">
+        <button class="btn-print" id="btn-print-toggle">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></svg>
+          Imprimir
+          <svg width="10" height="10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="print-dropdown" id="print-dropdown">
+          <div class="print-dropdown-header">Selecione a versão</div>
+          <div class="print-option" onclick="doPrint('cliente')">
+            <div class="print-option-icon" style="background:#DBEAFE">
+              <svg fill="none" viewBox="0 0 24 24" stroke="#1B5FBF" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <div class="print-option-title">Versão cliente</div>
+              <div class="print-option-desc">Dados do cliente, veículo, serviços, peças e valores completos</div>
+            </div>
+          </div>
+          <div class="print-option" onclick="doPrint('mecanico')">
+            <div class="print-option-icon" style="background:#FEF3C7">
+              <svg fill="none" viewBox="0 0 24 24" stroke="#92400E" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div>
+              <div class="print-option-title">Versão mecânico</div>
+              <div class="print-option-desc">Nome e veículo, serviços e peças — sem valores ou dados pessoais</div>
+            </div>
+          </div>
+          <div class="print-option" onclick="doPrint('estoque')">
+            <div class="print-option-icon" style="background:#DCFCE7">
+              <svg fill="none" viewBox="0 0 24 24" stroke="#166534" stroke-width="1.8"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+            </div>
+            <div>
+              <div class="print-option-title">Versão estoque</div>
+              <div class="print-option-desc">Apenas lista de peças e insumos necessários para esta OS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ STEPPER DE STATUS ═══ -->
+  <div class="stepper-wrap">
+    <div class="stepper" id="stepper"><!-- gerado pelo JS --></div>
+    <div class="stepper-divider"></div>
+    <div class="cancel-step" id="cancel-step">
+      <div class="step-inner" onclick="cancelarOS()">
+        <div class="step-circle">✕</div>
+        <div class="step-label">Cancelada</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="section-tabs">
+    <button class="section-tab active" data-tab="dados">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      Dados e diagnóstico
+      <span class="tab-count" id="diag-count">2</span>
+    </button>
+    <button class="section-tab" data-tab="servicos">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Serviços e peças
+      <span class="tab-count">5</span>
+    </button>
+  </div>
+
+  <!-- CONTEÚDO -->
+  <div class="content">
+    <div>
+
+      <!-- TAB 1: Dados e diagnóstico -->
+      <div class="tab-panel active" id="tab-dados">
+
+        <div class="card cliente-info">
+          <div class="card-header">
+            <span class="card-title"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Cliente</span>
+            <span class="bling-badge print-hide">⚡ Busca no Bling</span>
+          </div>
+          <div class="card-body">
+            <div class="field-mb">
+              <div class="field print-hide">
+                <label>Buscar por nome, CPF ou CNPJ</label>
+                <div class="input-with-action">
+                  <input type="text" value="Carlos Mendonça"/>
+                  <button class="input-action-btn">Buscar</button>
+                </div>
+              </div>
+            </div>
+            <div class="pessoa-card">
+              <div style="flex:1"><div class="pessoa-nome">Carlos Mendonça</div><div class="pessoa-sub">CPF: 123.456.789-00 · (41) 99999-1234</div></div>
+              <span class="fonte-tag print-hide">Bling</span>
+              <button class="remove-btn print-hide">✕</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>Veículo</span>
+            <span class="detran-badge print-hide">🔎 Consulta Detran</span>
+          </div>
+          <div class="card-body">
+            <div class="field-mb print-hide">
+              <div class="field">
+                <label>Placa</label>
+                <div class="input-with-action">
+                  <input type="text" value="ABC-1234" style="font-family:var(--mono);letter-spacing:1.5px;font-weight:600;text-transform:uppercase"/>
+                  <button class="input-action-btn">Consultar</button>
+                </div>
+              </div>
+            </div>
+            <div class="veiculo-result">
+              <div class="veiculo-header">
+                <span class="placa">ABC-1234</span>
+                <div><div class="veiculo-titulo">Honda Civic EXL</div><div class="veiculo-sub2">2021/2022 · Prata · Gasolina</div></div>
+                <span class="detran-tag print-hide">✓ Detran</span>
+              </div>
+              <div class="veiculo-grid">
+                <div class="veiculo-dado"><label>Chassi</label><span style="font-family:var(--mono);font-size:11px">9BWZZZ377VT004251</span></div>
+                <div class="veiculo-dado"><label>Motor</label><span>1.5 Turbo VTEC</span></div>
+                <div class="veiculo-dado"><label>Cor</label><span>Prata Lunar</span></div>
+                <div class="veiculo-dado"><label>Km atual</label><input class="km-input" type="text" value="42.350"/></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>Queixa do cliente</span>
+          </div>
+          <div class="card-body">
+            <div class="field">
+              <label>Descrição do problema relatado</label>
+              <textarea>Barulho ao frear e pedal mole. Cliente menciona que o problema piora em descidas longas.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg>Checklist de inspeção</span>
+            <div style="display:flex;gap:10px;font-size:11.5px" class="print-hide">
+              <span style="display:flex;align-items:center;gap:4px;color:#166534"><span style="width:7px;height:7px;border-radius:50%;background:#16A34A;display:inline-block"></span>OK</span>
+              <span style="display:flex;align-items:center;gap:4px;color:#92400E"><span style="width:7px;height:7px;border-radius:50%;background:#D97706;display:inline-block"></span>Atenção</span>
+              <span style="display:flex;align-items:center;gap:4px;color:#991B1B"><span style="width:7px;height:7px;border-radius:50%;background:#DC2626;display:inline-block"></span>Crítico</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="diag-section">
+              <div class="diag-section-title">Sistema de freios</div>
+              <div class="diag-checklist">
+                <div class="diag-item critico"><span class="diag-item-label">Pastilha dianteira</span><button class="diag-status-btn">Crítico</button></div>
+                <div class="diag-item atencao"><span class="diag-item-label">Pastilha traseira</span><button class="diag-status-btn">Atenção</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Disco dianteiro</span><button class="diag-status-btn">OK</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Disco traseiro</span><button class="diag-status-btn">OK</button></div>
+                <div class="diag-item critico"><span class="diag-item-label">Fluido de freio</span><button class="diag-status-btn">Crítico</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Cilindro mestre</span><button class="diag-status-btn">OK</button></div>
+              </div>
+            </div>
+            <div class="diag-section">
+              <div class="diag-section-title">Motor e transmissão</div>
+              <div class="diag-checklist">
+                <div class="diag-item ok"><span class="diag-item-label">Nível do óleo</span><button class="diag-status-btn">OK</button></div>
+                <div class="diag-item atencao"><span class="diag-item-label">Filtro de ar</span><button class="diag-status-btn">Atenção</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Correia dentada</span><button class="diag-status-btn">OK</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Velas de ignição</span><button class="diag-status-btn">OK</button></div>
+              </div>
+            </div>
+            <div class="diag-section">
+              <div class="diag-section-title">Suspensão e direção</div>
+              <div class="diag-checklist">
+                <div class="diag-item ok"><span class="diag-item-label">Amortecedor diant.</span><button class="diag-status-btn">OK</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Amortecedor tras.</span><button class="diag-status-btn">OK</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Barra estabilizadora</span><button class="diag-status-btn">OK</button></div>
+                <div class="diag-item ok"><span class="diag-item-label">Terminal de direção</span><button class="diag-status-btn">OK</button></div>
+              </div>
+            </div>
+            <div class="diag-section">
+              <div class="diag-section-title">Observações técnicas</div>
+              <textarea class="diag-obs">Pastilhas dianteiras com menos de 2mm — troca urgente. Fluido de freio com aparência escura.</textarea>
+            </div>
+            <div class="diag-section print-hide">
+              <div class="diag-section-title">Fotos do diagnóstico</div>
+              <div class="diag-fotos">
+                <div class="diag-foto-add"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><circle cx="12" cy="13" r="3"/></svg>Foto</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Serviços e peças -->
+      <div class="tab-panel" id="tab-servicos">
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>Serviços</span>
+          </div>
+          <div class="card-body">
+            <div id="servicos-list">
+              <div class="servico-card">
+                <div class="servico-card-header">
+                  <span class="servico-num">#1</span>
+                  <input class="servico-titulo-input" type="text" value="Revisão + troca de óleo"/>
+                  <button class="servico-del-btn">✕</button>
+                </div>
+                <div class="servico-card-body">
+                  <div class="field"><label>Tipo</label><select><option selected>Revisão geral</option><option>Troca de óleo</option><option>Freios</option><option>Suspensão</option><option>Elétrica</option><option>Outro</option></select></div>
+                  <div class="field"><label>Mecânico responsável</label><select><option>João Silva</option><option selected>André Lima</option><option>Pedro Rocha</option></select></div>
+                </div>
+              </div>
+              <div class="servico-card">
+                <div class="servico-card-header">
+                  <span class="servico-num">#2</span>
+                  <input class="servico-titulo-input" type="text" value="Alinhamento e balanceamento"/>
+                  <button class="servico-del-btn">✕</button>
+                </div>
+                <div class="servico-card-body">
+                  <div class="field"><label>Tipo</label><select><option>Revisão geral</option><option>Troca de óleo</option><option>Freios</option><option>Suspensão</option><option>Elétrica</option><option selected>Outro</option></select></div>
+                  <div class="field"><label>Mecânico responsável</label><select><option selected>João Silva</option><option>André Lima</option><option>Pedro Rocha</option></select></div>
+                </div>
+              </div>
+            </div>
+            <button class="add-btn" id="add-servico-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Adicionar serviço</button>
+          </div>
+        </div>
+
+        <div class="card card-pecas">
+          <div class="card-header">
+            <span class="card-title"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>Peças e insumos</span>
+            <span class="bling-badge print-hide">⚡ Saldo do Bling</span>
+          </div>
+          <div class="card-body">
+            <table class="pecas-table">
+              <thead>
+                <tr>
+                  <th>Cód. / Descrição</th>
+                  <th style="width:70px">Qtd.</th>
+                  <th class="th-val peca-valor" style="width:110px">Vlr. unit.</th>
+                  <th class="th-total peca-total" style="width:90px;text-align:right">Total</th>
+                  <th style="width:36px" class="print-hide"></th>
+                </tr>
+              </thead>
+              <tbody id="pecas-body">
+                <tr>
+                  <td><input type="text" value="Filtro de óleo — Fram PH10575"/><div class="estoque-ok print-hide">✓ Bling: 12 un.</div></td>
+                  <td class="td-qty"><input type="number" value="1" min="1"/></td>
+                  <td class="td-val peca-valor"><input type="text" value="R$ 28,00"/></td>
+                  <td class="td-total peca-total">R$ 28,00</td>
+                  <td class="td-del print-hide"><button>✕</button></td>
+                </tr>
+                <tr>
+                  <td><input type="text" value="Óleo motor 5W30 sintético — 1L"/><div class="estoque-ok print-hide">✓ Bling: 8 un.</div></td>
+                  <td class="td-qty"><input type="number" value="4" min="1"/></td>
+                  <td class="td-val peca-valor"><input type="text" value="R$ 38,00"/></td>
+                  <td class="td-total peca-total">R$ 152,00</td>
+                  <td class="td-del print-hide"><button>✕</button></td>
+                </tr>
+                <tr>
+                  <td><input type="text" value="Pastilha de freio dianteira — Jurid"/><div class="estoque-low print-hide">⚠ Bling: 2 un. (baixo)</div></td>
+                  <td class="td-qty"><input type="number" value="1" min="1"/></td>
+                  <td class="td-val peca-valor"><input type="text" value="R$ 120,00"/></td>
+                  <td class="td-total peca-total">R$ 120,00</td>
+                  <td class="td-del print-hide"><button>✕</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="add-btn print-hide" id="add-peca-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Adicionar peça / insumo</button>
+
+            <!-- Resumo financeiro — visível na impressão do cliente -->
+            <div class="resumo-financeiro-print" style="margin-top:16pt;border-top:1px solid #ccc;padding-top:12pt;display:none">
+              <table style="width:100%;font-size:11pt">
+                <tr><td style="color:#666">Peças e insumos</td><td style="text-align:right;font-family:monospace">R$ 300,00</td></tr>
+                <tr><td style="color:#666">Serviços (2)</td><td style="text-align:right;font-family:monospace">R$ 240,00</td></tr>
+                <tr><td style="color:#666">Desconto</td><td style="text-align:right;font-family:monospace">—</td></tr>
+                <tr style="font-weight:700;font-size:12pt;border-top:2px solid #1B2D5B"><td style="padding-top:8pt">Total</td><td style="text-align:right;padding-top:8pt;font-family:monospace">R$ 540,00</td></tr>
+              </table>
+              <div style="margin-top:32pt;display:flex;gap:40pt;font-size:10pt;color:#555">
+                <div style="flex:1;border-top:1px solid #999;padding-top:6pt;text-align:center">Assinatura do cliente</div>
+                <div style="flex:1;border-top:1px solid #999;padding-top:6pt;text-align:center">Responsável técnico</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ PAINEL LATERAL ═══ -->
+    <div class="side-col">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Status</span></div>
+        <div class="card-body">
+          <div class="field field-mb">
+            <label>Avançar status</label>
+            <select id="status-select" style="font-weight:500" onchange="setStepFromSelect(this.value)">
+              <option value="0" selected>🟣  Orçamento</option>
+              <option value="1">✅  Aprovado pelo Cliente</option>
+              <option value="2">🔧  Em Execução</option>
+              <option value="3">🏁  Serviço Finalizado</option>
+              <option value="4">💳  Faturada</option>
+              <option value="5">🔒  Encerrada</option>
+              <option disabled>──────────────</option>
+              <option value="cancelada">❌  Cancelada</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Observações internas</label>
+            <textarea placeholder="Notas internas…" style="min-height:50px"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Diagnóstico</span></div>
+        <div class="card-body" style="padding:14px 18px">
+          <div class="diag-resumo">
+            <div class="diag-resumo-item"><div class="diag-resumo-num" style="color:var(--green)" id="cnt-ok">9</div><div class="diag-resumo-label">OK</div></div>
+            <div class="diag-resumo-item"><div class="diag-resumo-num" style="color:var(--amber)" id="cnt-atencao">2</div><div class="diag-resumo-label">Atenção</div></div>
+            <div class="diag-resumo-item"><div class="diag-resumo-num" style="color:var(--red)" id="cnt-critico">2</div><div class="diag-resumo-label">Crítico</div></div>
+          </div>
+          <div style="margin-top:10px;font-size:12px;color:var(--red);font-weight:500;display:flex;align-items:center;gap:5px" id="alerta-critico">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            2 itens críticos
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">Resumo financeiro</span></div>
+        <div class="card-body" style="padding:16px 18px">
+          <div class="resumo-linha"><span class="rl-label">Peças e insumos</span><span class="rl-val">R$ 300,00</span></div>
+          <div class="resumo-linha"><span class="rl-label">Serviços (2)</span><span class="rl-val">R$ 240,00</span></div>
+          <div class="resumo-linha"><span class="rl-label">Desconto</span><span class="rl-val" style="color:var(--muted)">—</span></div>
+          <div class="resumo-total"><span class="rl-label">Total orçado</span><span class="rl-val">R$ 540,00</span></div>
+          <div class="btn-stack">
+            <button class="btn btn-ghost"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>Salvar</button>
+          </div>
+          <div class="divider"></div>
+          <div class="aprovacao-box">
+            <div class="aprovacao-box-title"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Aprovação do cliente</div>
+            <p>Após confirmação, o orçamento vira uma OS ativa e as peças são reservadas no Bling.</p>
+            <button class="btn btn-success" id="aprovar-btn"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Aprovar e gerar OS</button>
+          </div>
+          <div class="info-box"><strong>Integração Bling</strong>Ao aprovar, a saída será lançada automaticamente no estoque.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="hd-orcamento.js"></script>
+
+<!-- ═══════════════════════════════════════════════════════
+     BLOCO DE IMPRESSÃO DEDICADO (invisível na tela)
+     Página 1: Cliente + Veículo + Queixa
+     Página 2: Serviços + Peças + Financeiro
+═══════════════════════════════════════════════════════ -->
+<div class="print-block" style="display:none">
+
+  <!-- ── PÁGINA 1: Cliente / Veículo / Queixa ── -->
+  <div class="print-page1">
+    <div class="print-section-title">Informações do atendimento</div>
+
+    <div class="print-grid-cv">
+      <!-- Dados do cliente -->
+      <div class="print-box print-cliente-pessoal">
+        <div class="print-box-title">Cliente</div>
+        <div class="print-row"><label>Nome</label><span>Carlos Mendonça</span></div>
+        <div class="print-row"><label>CPF</label><span>123.456.789-00</span></div>
+        <div class="print-row"><label>Telefone</label><span>(41) 99999-1234</span></div>
+      </div>
+      <!-- Dados do veículo -->
+      <div class="print-box">
+        <div class="print-box-title">Veículo</div>
+        <div class="print-row"><label>Placa</label><span style="font-family:monospace;font-weight:700;letter-spacing:1px">ABC-1234</span></div>
+        <div class="print-row"><label>Modelo</label><span>Honda Civic EXL</span></div>
+        <div class="print-row"><label>Ano</label><span>2021/2022</span></div>
+        <div class="print-row"><label>Cor</label><span>Prata Lunar</span></div>
+        <div class="print-row"><label>Km atual</label><input type="text" value="42.350" style="font-weight:600"/></div>
+        <div class="print-row"><label>Motor</label><span>1.5 Turbo VTEC</span></div>
+      </div>
+    </div>
+
+    <!-- Queixa -->
+    <div class="print-queixa">
+      <div class="print-queixa-title">Queixa do cliente</div>
+      <textarea rows="3" style="width:100%">Barulho ao frear e pedal mole. Cliente menciona que o problema piora em descidas longas.</textarea>
+    </div>
+
+    <!-- Observações técnicas -->
+    <div class="print-queixa">
+      <div class="print-queixa-title">Observações técnicas</div>
+      <textarea rows="3" style="width:100%">Pastilhas dianteiras com menos de 2mm — troca urgente. Fluido de freio com aparência escura.</textarea>
+    </div>
+
+    <!-- Assinatura (somente versão cliente) -->
+    <div class="print-assinatura">
+      <div class="print-assinatura-box">Assinatura do cliente</div>
+      <div class="print-assinatura-box">Data</div>
+    </div>
+  </div>
+
+  <!-- ── PÁGINA 2: Serviços + Peças ── -->
+  <div class="print-page2">
+
+    <!-- Serviços -->
+    <div class="print-section-servicos">
+      <div class="print-section-title">Serviços</div>
+      <div class="print-servico-item">
+        <div class="print-servico-nome">Revisão + troca de óleo</div>
+        <div class="print-servico-meta">
+          <span>Tipo: Revisão geral</span>
+          <span>Mecânico: André Lima</span>
+        </div>
+      </div>
+      <div class="print-servico-item">
+        <div class="print-servico-nome">Alinhamento e balanceamento</div>
+        <div class="print-servico-meta">
+          <span>Tipo: Outro</span>
+          <span>Mecânico: João Silva</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Peças -->
+    <div class="print-section-title">Peças e insumos</div>
+    <table class="print-pecas-table">
+      <thead>
+        <tr>
+          <th style="width:40%">Peça / Insumo</th>
+          <th style="width:12%;text-align:center">Qtd</th>
+          <th class="print-col-valor" style="width:18%;text-align:right">Valor unit.</th>
+          <th class="print-col-total" style="width:18%;text-align:right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pastilha de freio dianteira</td>
+          <td style="text-align:center"><input type="text" value="2"/></td>
+          <td class="print-col-valor" style="text-align:right">R$ 89,90</td>
+          <td class="print-col-total" style="text-align:right">R$ 179,80</td>
+        </tr>
+        <tr>
+          <td>Fluido de freio DOT 4</td>
+          <td style="text-align:center"><input type="text" value="1"/></td>
+          <td class="print-col-valor" style="text-align:right">R$ 34,50</td>
+          <td class="print-col-total" style="text-align:right">R$ 34,50</td>
+        </tr>
+        <tr>
+          <td>Filtro de ar</td>
+          <td style="text-align:center"><input type="text" value="1"/></td>
+          <td class="print-col-valor" style="text-align:right">R$ 45,00</td>
+          <td class="print-col-total" style="text-align:right">R$ 45,00</td>
+        </tr>
+        <tr>
+          <td>Óleo motor 5W30 sintético</td>
+          <td style="text-align:center"><input type="text" value="4"/></td>
+          <td class="print-col-valor" style="text-align:right">R$ 52,00</td>
+          <td class="print-col-total" style="text-align:right">R$ 208,00</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Resumo financeiro -->
+    <div class="print-resumo-fin">
+      <table>
+        <tr><td>Peças e insumos</td><td>R$ 467,30</td></tr>
+        <tr><td>Mão de obra</td><td>R$ 350,00</td></tr>
+        <tr class="total-row"><td>Total</td><td>R$ 817,30</td></tr>
+      </table>
+    </div>
+
+  </div><!-- /print-page2 -->
+</div><!-- /print-block -->
+
+</body>
+</html>

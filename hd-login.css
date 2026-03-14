@@ -1,0 +1,220 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F4F3F0; --surface: #FFFFFF; --border: #E3E1DA;
+  --text: #12151F; --muted: #888680;
+  --navy: #1B2D5B; --navy2: #243672; --red: #C0152A; --red2: #E01830;
+  --radius: 10px;
+  --font: 'DM Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── Lado esquerdo (navy) ── */
+.login-left {
+  width: 420px;
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  padding: 48px 40px;
+}
+
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.login-logo {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}
+
+.login-tagline {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.login-left-footer {
+  position: absolute;
+  bottom: 28px;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Lado direito (formulário) ── */
+.login-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 40px 36px;
+}
+
+.login-card-header {
+  margin-bottom: 28px;
+}
+
+.login-card-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  margin-bottom: 5px;
+}
+
+.login-card-header p {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+/* ── Campos ── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.field input {
+  font-family: var(--font);
+  font-size: 13.5px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 12px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.field input:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(27, 45, 91, 0.08);
+}
+
+.field input::placeholder {
+  color: #C2C0BB;
+}
+
+/* ── Campo senha com botão olho ── */
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  transition: color 0.12s;
+}
+
+.toggle-password:hover { color: var(--text); }
+
+/* ── Erro ── */
+.login-error {
+  font-size: 13px;
+  color: var(--red);
+  min-height: 20px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.login-error:empty { display: none; }
+
+/* ── Botão entrar ── */
+.btn-login {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  padding: 11px;
+  border-radius: 9px;
+  border: none;
+  background: var(--red);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 4px;
+}
+
+.btn-login:hover { background: var(--red2); }
+.btn-login:active { transform: scale(0.99); }
+.btn-login:disabled { opacity: 0.65; cursor: default; }
+
+.btn-loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Responsivo ── */
+@media (max-width: 700px) {
+  body { flex-direction: column; }
+  .login-left {
+    width: 100%;
+    min-height: auto;
+    padding: 40px 24px 32px;
+  }
+  .login-logo { width: 120px; height: 120px; }
+  .login-left-footer { position: static; margin-top: 20px; }
+  .login-right { padding: 24px 16px 40px; }
+  .login-card { padding: 28px 20px; }
+}
