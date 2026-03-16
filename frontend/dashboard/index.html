@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link rel="stylesheet" href="hd-dashboard.css">
+<script src="../shared/hd-api.js"></script>
 <script src="../shared/hd-auth.js"></script>
 </head>
 <body>
@@ -45,6 +46,10 @@
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       Comissionamento
     </a>
+        <a href="../historico/">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Histórico
+    </a>
     <div class="nav-section">Integração</div>
     <button class="btn-sync" onclick="sincronizarBling()">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -61,7 +66,7 @@
   <header>
     <div class="header-left">
       <span class="page-title">Dashboard</span>
-      <span class="page-date">Quinta-feira, 12 de março de 2026</span>
+      <span class="page-date" id="page-date">Quinta-feira, 12 de março de 2026</span>
     </div>
     <div class="header-right">
       <div class="period-tabs">
@@ -91,46 +96,34 @@
 
     <div class="kpi-grid">
       <div class="kpi-card">
-        <div class="kpi-label">Faturamento (semana)</div>
-        <div class="kpi-value">R$&thinsp;18,4k</div>
-        <div class="kpi-trend trend-up">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-          +12% vs semana passada
-        </div>
-        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:73%;background:var(--concluida)"></div></div>
+        <div class="kpi-label">Faturamento do mês</div>
+        <div class="kpi-value" id="kpi-faturamento">—</div>
+        <div class="kpi-trend trend-neutral" id="kpi-fat-sub">OS faturadas no mês</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" id="kpi-fat-bar" style="width:0%;background:var(--concluida)"></div></div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">OS concluídas</div>
-        <div class="kpi-value">24</div>
-        <div class="kpi-trend trend-up">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-          +3 vs semana passada
-        </div>
-        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:80%;background:var(--navy)"></div></div>
+        <div class="kpi-label">Concluídas hoje</div>
+        <div class="kpi-value" id="kpi-concluidas">—</div>
+        <div class="kpi-trend trend-neutral">serviços finalizados hoje</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" id="kpi-conc-bar" style="width:0%;background:var(--navy)"></div></div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Em Execução</div>
-        <div class="kpi-value" style="color:var(--andamento)">5</div>
-        <div class="kpi-trend trend-neutral">2 aguardando peças</div>
-        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:40%;background:var(--andamento)"></div></div>
+        <div class="kpi-value" id="kpi-execucao" style="color:var(--andamento)">—</div>
+        <div class="kpi-trend trend-neutral" id="kpi-exec-sub">OS em andamento</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" id="kpi-exec-bar" style="width:0%;background:var(--andamento)"></div></div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Orçamentos abertos</div>
-        <div class="kpi-value" style="color:var(--orcamento)">7</div>
-        <div class="kpi-trend trend-down">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M7 7l10 10M17 7v10H7"/></svg>
-          3 sem resposta +2d
-        </div>
-        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:35%;background:var(--orcamento)"></div></div>
+        <div class="kpi-value" id="kpi-orcamentos" style="color:var(--orcamento)">—</div>
+        <div class="kpi-trend trend-neutral">aguardando aprovação</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" id="kpi-orc-bar" style="width:0%;background:var(--orcamento)"></div></div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">Ticket médio</div>
-        <div class="kpi-value">R$&thinsp;767</div>
-        <div class="kpi-trend trend-up">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-          +R$&thinsp;54 vs semana ant.
-        </div>
-        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:61%;background:var(--red)"></div></div>
+        <div class="kpi-label">OS criadas hoje</div>
+        <div class="kpi-value" id="kpi-criadas-hoje">—</div>
+        <div class="kpi-trend trend-neutral">novas entradas hoje</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:0%;background:var(--red)"></div></div>
       </div>
     </div>
 
@@ -159,18 +152,10 @@
           <span class="card-sub">OS na semana</span>
         </div>
         <div class="card-body">
-          <div class="mec-list">
+          <div class="mec-list" id="mec-list">
             <div class="mec-item">
               <div class="mec-row"><span class="mec-nome">André Lima</span><span class="mec-count">10 OS · R$ 7.840</span></div>
               <div class="mec-progress"><div class="mec-fill" style="width:100%;background:var(--navy)"></div></div>
-            </div>
-            <div class="mec-item">
-              <div class="mec-row"><span class="mec-nome">João Silva</span><span class="mec-count">8 OS · R$ 6.120</span></div>
-              <div class="mec-progress"><div class="mec-fill" style="width:80%;background:var(--red)"></div></div>
-            </div>
-            <div class="mec-item">
-              <div class="mec-row"><span class="mec-nome">Pedro Rocha</span><span class="mec-count">6 OS · R$ 4.440</span></div>
-              <div class="mec-progress"><div class="mec-fill" style="width:60%;background:var(--andamento)"></div></div>
             </div>
           </div>
           <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:14px">
@@ -188,10 +173,10 @@
     <div class="bottom-grid">
       <div class="card">
         <div class="card-header">
-          <span class="card-title">OS de hoje</span>
-          <a href="#" style="font-size:12.5px;color:var(--muted);text-decoration:none">Ver todas →</a>
+          <span class="card-title">Últimas OS</span>
+          <a href="../lista-os/" style="font-size:12.5px;color:var(--muted);text-decoration:none">Ver todas →</a>
         </div>
-        <div class="os-list">
+        <div class="os-list" id="os-list">
           <div class="os-item"><span class="os-dot encerrada"></span><div class="os-info"><div class="os-cliente">Renato Alves</div><div class="os-detalhe">HB20 2022 · Suspensão traseira</div></div><span class="os-num">#0087</span><span class="os-valor">R$ 870</span></div>
           <div class="os-item"><span class="os-dot encerrada"></span><div class="os-info"><div class="os-cliente">Patrícia Souza</div><div class="os-detalhe">Corolla 2020 · Alinhamento</div></div><span class="os-num">#0086</span><span class="os-valor">R$ 180</span></div>
           <div class="os-item"><span class="os-dot em-execucao"></span><div class="os-info"><div class="os-cliente">Carlos Mendonça</div><div class="os-detalhe">Civic 2021 · Revisão + freios</div></div><span class="os-num">#0089</span><span class="os-valor">R$ 420</span></div>

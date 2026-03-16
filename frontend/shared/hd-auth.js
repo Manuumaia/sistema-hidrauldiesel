@@ -1,9 +1,9 @@
 // hd-auth.js — Verificação de sessão (todas as páginas protegidas carregam este script)
-// Quando tiver backend: substituir sessionStorage pela chamada à API de sessão
 
 (function () {
-  const raw = sessionStorage.getItem('hd_user');
-  if (!raw) {
+  const token = sessionStorage.getItem('hd_token');
+
+  if (!token) {
     sessionStorage.setItem('hd_redirect', window.location.href);
     window.location.replace('../login/');
     return;
@@ -21,16 +21,16 @@
   `;
   document.head.appendChild(style);
 
-  const user = JSON.parse(raw);
+  const raw = sessionStorage.getItem('hd_usuario');
+  const user = raw ? JSON.parse(raw) : { nome: 'Usuário', name: 'Usuário' };
 
   document.addEventListener('DOMContentLoaded', function () {
-    // Atualiza o nome do usuário na sidebar
     const bottom = document.querySelector('.sidebar-bottom');
     if (bottom) {
       bottom.innerHTML = `
         <div class="sb-user-info">
-          <strong>${user.name}</strong>
-          Hidrauldiesel
+          <strong>${user.nome || user.name || 'Usuário'}</strong>
+          <span>Hidrauldiesel</span>
         </div>
         <button class="btn-logout" onclick="hdLogout()" title="Sair">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -42,7 +42,8 @@
   });
 
   window.hdLogout = function () {
-    sessionStorage.removeItem('hd_user');
-    window.location.href = '../login/';
+    sessionStorage.removeItem('hd_token');
+    sessionStorage.removeItem('hd_usuario');
+    window.location.replace('../login/');
   };
 })();

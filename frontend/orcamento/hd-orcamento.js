@@ -12,6 +12,9 @@ const STEPS = [
 let currentStep = 0;
 // true quando OS avança de Serviço Finalizado → Encerrada sem passar por Faturada
 let faturadaSkipped = false;
+// impede chamada à API enquanto a página está sendo populada com dados carregados
+let _carregandoOS = false;
+let osId = null;
 
 function renderStepper() {
   const el = document.getElementById('stepper');
@@ -67,6 +70,7 @@ function setStep(idx) {
   currentStep = idx;
   renderStepper();
   document.getElementById('status-select').value = String(idx);
+  if (!_carregandoOS) atualizarStatus(STEPS[idx].key);
 }
 
 function setStepFromSelect(val) {
@@ -99,6 +103,15 @@ document.querySelectorAll('.section-tab').forEach(tab => {
   });
 });
 
+// ── TIPO DE ITEM: VEÍCULO / EQUIPAMENTO ──────────────────
+function switchItemType(tipo) {
+  document.querySelectorAll('.item-tab').forEach(t => t.classList.toggle('active', t.dataset.type === tipo));
+  document.getElementById('painel-veiculo').style.display    = tipo === 'veiculo'     ? '' : 'none';
+  document.getElementById('painel-equipamento').style.display = tipo === 'equipamento' ? '' : 'none';
+  document.getElementById('card-item-title').textContent = tipo === 'veiculo' ? 'Veículo' : 'Equipamento';
+  document.getElementById('detran-badge').style.display = tipo === 'veiculo' ? '' : 'none';
+}
+
 // ── CHECKLIST DIAGNÓSTICO ─────────────────────────────────
 const states = ['', 'ok', 'atencao', 'critico'];
 const labels = ['—', 'OK', 'Atenção', 'Crítico'];
@@ -130,28 +143,45 @@ function updateDiag() {
 
 // ── ADICIONAR SERVIÇO ─────────────────────────────────────
 let servicoCount = 2;
+
+function renumerarServicos() {
+  document.querySelectorAll('#servicos-list .servico-card').forEach((card, i) => {
+    const numEl = card.querySelector('.servico-num');
+    if (numEl) numEl.textContent = `#${i + 1}`;
+  });
+}
+
 document.getElementById('add-servico-btn').addEventListener('click', () => {
-  servicoCount++;
   const tipos = ['Revisão geral','Troca de óleo','Freios','Suspensão','Elétrica','Outro'];
   const mecanicos = ['João Silva','André Lima','Pedro Rocha'];
+  const novoNum = document.querySelectorAll('#servicos-list .servico-card').length + 1;
   const div = document.createElement('div');
   div.className = 'servico-card';
   div.innerHTML = `
     <div class="servico-card-header">
-      <span class="servico-num">#${servicoCount}</span>
+      <span class="servico-num">#${novoNum}</span>
       <input class="servico-titulo-input" type="text" placeholder="Nome do serviço…"/>
       <button class="servico-del-btn">✕</button>
     </div>
     <div class="servico-card-body">
       <div class="field"><label>Tipo</label><select>${tipos.map(t=>`<option>${t}</option>`).join('')}</select></div>
       <div class="field"><label>Mecânico responsável</label><select>${mecanicos.map(m=>`<option>${m}</option>`).join('')}</select></div>
+      <div class="field"><label>Quantidade</label><input type="number" class="servico-quantidade-input" value="1" min="1" step="1"/></div>
+      <div class="field"><label>Valor do serviço (R$)</label><input type="number" class="servico-valor-input" placeholder="0,00" min="0" step="0.01"/></div>
     </div>`;
-  div.querySelector('.servico-del-btn').addEventListener('click', () => div.remove());
   document.getElementById('servicos-list').appendChild(div);
   div.querySelector('.servico-titulo-input').focus();
 });
 document.getElementById('servicos-list').addEventListener('click', e => {
-  if (e.target.closest('.servico-del-btn')) e.target.closest('.servico-card').remove();
+  if (e.target.closest('.servico-del-btn')) {
+    e.target.closest('.servico-card').remove();
+    renumerarServicos();
+    recalcularResumo();
+  }
+});
+document.getElementById('servicos-list').addEventListener('input', e => {
+  if (e.target.classList.contains('servico-valor-input') ||
+      e.target.classList.contains('servico-quantidade-input')) recalcularResumo();
 });
 
 // ── ADICIONAR PEÇA ────────────────────────────────────────
@@ -211,3 +241,179 @@ function doPrint(version) {
     document.body.classList.remove('print-v-cliente','print-v-mecanico','print-v-estoque');
   }, 120);
 }
+
+// ── INTEGRAÇÃO COM API ────────────────────────────────────
+
+// Lê ?id= da URL — redireciona se não houver
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  osId = params.get('id');
+  if (!osId) window.location.replace('../lista-os/');
+})();
+
+function fmtValor(v) {
+  return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function popularPagina(os) {
+  _carregandoOS = true;
+
+  // Header
+  document.querySelector('.header-num').textContent = `#${os.numero}`;
+  document.querySelector('.header-breadcrumb span').textContent = `/ OS #${os.numero}`;
+  document.getElementById('print-os-num').textContent = `#${os.numero}`;
+  document.title = `Hidrauldiesel — OS #${os.numero}`;
+
+  // Cliente
+  const pessoaNome = document.querySelector('.pessoa-nome');
+  if (pessoaNome) pessoaNome.textContent = os.cliente_nome || '—';
+
+  // Veículo — input de busca por placa
+  const placaInput = document.querySelector('#painel-veiculo .input-with-action input');
+  if (placaInput) placaInput.value = os.placa || '';
+
+  // Veículo — resultado exibido
+  const placaBadge = document.querySelector('.veiculo-header .placa');
+  if (placaBadge) placaBadge.textContent = os.placa || '—';
+
+  const veiculoTitulo = document.querySelector('.veiculo-titulo');
+  if (veiculoTitulo) veiculoTitulo.textContent = os.modelo || '—';
+
+  const veiculoSub2 = document.querySelector('.veiculo-sub2');
+  if (veiculoSub2) veiculoSub2.textContent = [os.ano, os.cor].filter(Boolean).join(' · ') || '—';
+
+  // Campos individuais — busca pela label dentro de .veiculo-dado
+  const getDado = lbl => [...document.querySelectorAll('#painel-veiculo .veiculo-dado')]
+    .find(d => d.querySelector('label')?.textContent.trim() === lbl);
+  const setSpan  = (lbl, val) => { const d = getDado(lbl); if (d?.querySelector('span'))  d.querySelector('span').textContent = val || '—'; };
+  const setInput = (lbl, val) => { const d = getDado(lbl); if (d?.querySelector('input')) d.querySelector('input').value    = val != null ? String(val) : ''; };
+
+  setSpan('Chassi',   os.chassi);
+  setSpan('Motor',    os.motor);
+  setSpan('Cor',      os.cor);
+  setInput('Km atual', os.km_atual);
+
+  // Queixa e observações técnicas
+  const queixaTA = document.getElementById('queixa-textarea');
+  if (queixaTA) queixaTA.value = os.queixa || '';
+
+  const obsTA = document.getElementById('obs-tecnica-textarea');
+  if (obsTA) obsTA.value = os.obs_tecnica || '';
+
+  // Serviços, peças e resumo financeiro
+  renderServicos(os.servicos || []);
+  renderPecas(os.pecas || []);
+  atualizarResumo(os.servicos || [], os.pecas || []);
+
+  // Stepper — sincronizar com status atual da OS
+  const idx = STEPS.findIndex(s => s.key === os.status);
+  if (idx >= 0) {
+    currentStep = idx;
+    renderStepper();
+    document.getElementById('status-select').value = String(idx);
+  }
+
+  _carregandoOS = false;
+}
+
+function renderServicos(servicos) {
+  const list = document.getElementById('servicos-list');
+  servicoCount = servicos.length;
+  if (servicos.length === 0) { list.innerHTML = ''; return; }
+
+  list.innerHTML = servicos.map((s, i) => `
+    <div class="servico-card">
+      <div class="servico-card-header">
+        <span class="servico-num">#${i + 1}</span>
+        <input class="servico-titulo-input" type="text" value="${s.descricao || ''}"/>
+        <button class="servico-del-btn">✕</button>
+      </div>
+      <div class="servico-card-body">
+        <div class="field"><label>Quantidade</label>
+          <input type="number" class="servico-quantidade-input" min="1" step="1" value="${Number(s.quantidade || 1)}"/>
+        </div>
+        <div class="field"><label>Valor do serviço (R$)</label>
+          <input type="number" class="servico-valor-input" placeholder="0,00" min="0" step="0.01" value="${Number(s.valor || 0) || ''}"/>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderPecas(pecas) {
+  const tbody = document.getElementById('pecas-body');
+  if (pecas.length === 0) { tbody.innerHTML = ''; return; }
+
+  tbody.innerHTML = pecas.map(p => {
+    const total = Number(p.quantidade || 1) * Number(p.valor_unit || 0);
+    return `
+      <tr>
+        <td><input type="text" value="${p.descricao || ''}"/></td>
+        <td class="td-qty"><input type="number" value="${p.quantidade || 1}" min="1"/></td>
+        <td class="td-val peca-valor"><input type="text" value="${fmtValor(p.valor_unit)}"/></td>
+        <td class="td-total peca-total">${fmtValor(total)}</td>
+        <td class="td-del print-hide"><button>✕</button></td>
+      </tr>`;
+  }).join('');
+}
+
+function atualizarResumo(servicos, pecas) {
+  const totalServicos = servicos.reduce((a, s) => a + Number(s.quantidade || 1) * Number(s.valor || 0), 0);
+  const totalPecas    = pecas.reduce((a, p) => a + Number(p.quantidade || 1) * Number(p.valor_unit || 0), 0);
+
+  _setResumo(totalServicos, totalPecas, servicos.length);
+}
+
+// Recalcula o resumo lendo diretamente do DOM (chamado ao editar valores)
+function recalcularResumo() {
+  const totalServicos = [...document.querySelectorAll('#servicos-list .servico-card')]
+    .reduce((a, card) => {
+      const qty = Number(card.querySelector('.servico-quantidade-input')?.value || 1);
+      const val = Number(card.querySelector('.servico-valor-input')?.value || 0);
+      return a + qty * val;
+    }, 0);
+
+  // Lê os totais já calculados de cada linha de peça
+  const parseBRL = s => Number((s || '0').replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+  const totalPecas = [...document.querySelectorAll('#pecas-body .td-total.peca-total')]
+    .reduce((a, td) => a + parseBRL(td.textContent), 0);
+
+  const nServicos = document.querySelectorAll('#servicos-list .servico-card').length;
+  _setResumo(totalServicos, totalPecas, nServicos);
+}
+
+function _setResumo(totalServicos, totalPecas, nServicos) {
+  const total = totalServicos + totalPecas;
+
+  const vals = document.querySelectorAll('.card .resumo-linha .rl-val');
+  if (vals[0]) vals[0].textContent = fmtValor(totalPecas);
+  if (vals[1]) vals[1].textContent = fmtValor(totalServicos);
+
+  const lbls = document.querySelectorAll('.card .resumo-linha .rl-label');
+  if (lbls[1]) lbls[1].textContent = `Serviços (${nServicos})`;
+
+  const totalEl = document.querySelector('.card .resumo-total .rl-val');
+  if (totalEl) totalEl.textContent = fmtValor(total);
+}
+
+async function atualizarStatus(novoStatus) {
+  if (!osId) return;
+  try {
+    await api.atualizarStatusOS(osId, novoStatus);
+    console.log('Status atualizado:', novoStatus);
+  } catch (err) {
+    console.error('Erro ao atualizar status:', err.message);
+    alert('Erro ao atualizar status: ' + err.message);
+  }
+}
+
+async function carregarOS() {
+  try {
+    const os = await api.buscarOS(osId);
+    popularPagina(os);
+  } catch (err) {
+    console.error('Erro ao carregar OS:', err.message);
+    alert('Erro ao carregar OS: ' + err.message);
+  }
+}
+
+if (osId) carregarOS();

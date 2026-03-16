@@ -6,6 +6,7 @@
 <title>Hidrauldiesel — Orçamento #ORC-0031</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="hd-orcamento.css">
+<script src="../shared/hd-api.js"></script>
 <script src="../shared/hd-auth.js"></script>
 </head>
 <body>
@@ -56,6 +57,10 @@
     <a href="../comissionamento/">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       Comissionamento
+    </a>
+        <a href="../historico/">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Histórico
     </a>
     <div class="nav-section">Integração</div>
     <button class="btn-sync" onclick="sincronizarBling()">
@@ -170,34 +175,65 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="card-item">
           <div class="card-header">
-            <span class="card-title"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>Veículo</span>
-            <span class="detran-badge print-hide">🔎 Consulta Detran</span>
+            <span class="card-title">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+              <span id="card-item-title">Veículo</span>
+            </span>
+            <div class="item-type-tabs print-hide">
+              <button class="item-tab active" data-type="veiculo" onclick="switchItemType('veiculo')">Veículo</button>
+              <button class="item-tab" data-type="equipamento" onclick="switchItemType('equipamento')">Equipamento</button>
+            </div>
+            <span class="detran-badge print-hide" id="detran-badge">🔎 Consulta Detran</span>
           </div>
           <div class="card-body">
-            <div class="field-mb print-hide">
-              <div class="field">
-                <label>Placa</label>
-                <div class="input-with-action">
-                  <input type="text" value="ABC-1234" style="font-family:var(--mono);letter-spacing:1.5px;font-weight:600;text-transform:uppercase"/>
-                  <button class="input-action-btn">Consultar</button>
+
+            <!-- ─── ABA: VEÍCULO ─── -->
+            <div id="painel-veiculo">
+              <div class="field-mb print-hide">
+                <div class="field">
+                  <label>Placa</label>
+                  <div class="input-with-action">
+                    <input type="text" value="ABC-1234" style="font-family:var(--mono);letter-spacing:1.5px;font-weight:600;text-transform:uppercase"/>
+                    <button class="input-action-btn">Consultar</button>
+                  </div>
+                </div>
+              </div>
+              <div class="veiculo-result">
+                <div class="veiculo-header">
+                  <span class="placa">ABC-1234</span>
+                  <div><div class="veiculo-titulo">Honda Civic EXL</div><div class="veiculo-sub2">2021/2022 · Prata · Gasolina</div></div>
+                  <span class="detran-tag print-hide">✓ Detran</span>
+                </div>
+                <div class="veiculo-grid veiculo-grid-3col">
+                  <div class="veiculo-dado"><label>Chassi</label><span style="font-family:var(--mono);font-size:11px">9BWZZZ377VT004251</span></div>
+                  <div class="veiculo-dado"><label>Motor</label><span>1.5 Turbo VTEC</span></div>
+                  <div class="veiculo-dado"><label>Cor</label><span>Prata Lunar</span></div>
+                  <div class="veiculo-dado"><label>Km atual</label><input class="km-input" type="text" value="42.350"/></div>
+                  <div class="veiculo-dado"><label>Frota</label><input class="km-input" type="text" placeholder="Nº interno do cliente"/></div>
                 </div>
               </div>
             </div>
-            <div class="veiculo-result">
-              <div class="veiculo-header">
-                <span class="placa">ABC-1234</span>
-                <div><div class="veiculo-titulo">Honda Civic EXL</div><div class="veiculo-sub2">2021/2022 · Prata · Gasolina</div></div>
-                <span class="detran-tag print-hide">✓ Detran</span>
-              </div>
-              <div class="veiculo-grid">
-                <div class="veiculo-dado"><label>Chassi</label><span style="font-family:var(--mono);font-size:11px">9BWZZZ377VT004251</span></div>
-                <div class="veiculo-dado"><label>Motor</label><span>1.5 Turbo VTEC</span></div>
-                <div class="veiculo-dado"><label>Cor</label><span>Prata Lunar</span></div>
-                <div class="veiculo-dado"><label>Km atual</label><input class="km-input" type="text" value="42.350"/></div>
+
+            <!-- ─── ABA: EQUIPAMENTO ─── -->
+            <div id="painel-equipamento" style="display:none">
+              <div class="veiculo-grid" style="grid-template-columns:1fr 1fr">
+                <div class="veiculo-dado" style="grid-column:1/-1">
+                  <label>Descrição</label>
+                  <input type="text" placeholder="Ex: Compressor de ar, Motor hidráulico…" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--sans)"/>
+                </div>
+                <div class="veiculo-dado">
+                  <label>Código do fabricante</label>
+                  <input type="text" placeholder="Cód. de referência" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--mono)"/>
+                </div>
+                <div class="veiculo-dado">
+                  <label>Frota</label>
+                  <input type="text" placeholder="Nº interno do cliente" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--sans)"/>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -208,7 +244,7 @@
           <div class="card-body">
             <div class="field">
               <label>Descrição do problema relatado</label>
-              <textarea>Barulho ao frear e pedal mole. Cliente menciona que o problema piora em descidas longas.</textarea>
+              <textarea id="queixa-textarea">Barulho ao frear e pedal mole. Cliente menciona que o problema piora em descidas longas.</textarea>
             </div>
           </div>
         </div>
@@ -254,7 +290,7 @@
             </div>
             <div class="diag-section">
               <div class="diag-section-title">Observações técnicas</div>
-              <textarea class="diag-obs">Pastilhas dianteiras com menos de 2mm — troca urgente. Fluido de freio com aparência escura.</textarea>
+              <textarea class="diag-obs" id="obs-tecnica-textarea">Pastilhas dianteiras com menos de 2mm — troca urgente. Fluido de freio com aparência escura.</textarea>
             </div>
             <div class="diag-section print-hide">
               <div class="diag-section-title">Fotos do diagnóstico</div>
@@ -284,6 +320,8 @@
                 <div class="servico-card-body">
                   <div class="field"><label>Tipo</label><select><option selected>Revisão geral</option><option>Troca de óleo</option><option>Freios</option><option>Suspensão</option><option>Elétrica</option><option>Outro</option></select></div>
                   <div class="field"><label>Mecânico responsável</label><select><option>João Silva</option><option selected>André Lima</option><option>Pedro Rocha</option></select></div>
+                  <div class="field"><label>Quantidade</label><input type="number" class="servico-quantidade-input" value="1" min="1" step="1"/></div>
+                  <div class="field"><label>Valor do serviço (R$)</label><input type="number" class="servico-valor-input" placeholder="0,00" min="0" step="0.01"/></div>
                 </div>
               </div>
               <div class="servico-card">
@@ -295,6 +333,8 @@
                 <div class="servico-card-body">
                   <div class="field"><label>Tipo</label><select><option>Revisão geral</option><option>Troca de óleo</option><option>Freios</option><option>Suspensão</option><option>Elétrica</option><option selected>Outro</option></select></div>
                   <div class="field"><label>Mecânico responsável</label><select><option selected>João Silva</option><option>André Lima</option><option>Pedro Rocha</option></select></div>
+                  <div class="field"><label>Quantidade</label><input type="number" class="servico-quantidade-input" value="1" min="1" step="1"/></div>
+                  <div class="field"><label>Valor do serviço (R$)</label><input type="number" class="servico-valor-input" placeholder="0,00" min="0" step="0.01"/></div>
                 </div>
               </div>
             </div>

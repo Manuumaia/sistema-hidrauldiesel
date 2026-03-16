@@ -1,14 +1,7 @@
 // hd-login.js
-// Usuários temporários (frontend only).
-// Quando tiver backend: substituir a função `autenticar` por uma chamada fetch() à API.
-
-const USUARIOS = [
-  { username: 'admin',    password: 'admin123', name: 'Administrador' },
-  { username: 'manuella', password: 'hd2026',   name: 'Manuella'      },
-];
 
 // ── Redirecionamento se já estiver logado ──
-if (sessionStorage.getItem('hd_user')) {
+if (sessionStorage.getItem('hd_token')) {
   window.location.replace('../dashboard/');
 }
 
@@ -33,7 +26,7 @@ toggleBtn.addEventListener('click', function () {
 });
 
 // ── Submit ──
-form.addEventListener('submit', function (e) {
+form.addEventListener('submit', async function (e) {
   e.preventDefault();
   errorBox.textContent = '';
 
@@ -45,31 +38,28 @@ form.addEventListener('submit', function (e) {
     return;
   }
 
-  // Simula loading (facilita a troca por fetch() no futuro)
+  console.log('Tentando login com:', username);
   setLoading(true);
 
-  setTimeout(function () {
-    // Quando tiver backend: trocar este bloco por fetch('/api/login', { method:'POST', body: JSON.stringify({username, password}) })
-    const usuario = autenticar(username, password);
+  try {
+    const resultado = await api.login(username, password);
+    console.log('Login OK:', resultado);
 
-    if (usuario) {
-      sessionStorage.setItem('hd_user', JSON.stringify({ name: usuario.name, username: usuario.username }));
-      const redirect = sessionStorage.getItem('hd_redirect') || '../dashboard/';
-      sessionStorage.removeItem('hd_redirect');
-      window.location.replace(redirect);
-    } else {
-      errorBox.textContent = 'Usuário ou senha incorretos.';
-      inputPass.value = '';
-      inputPass.focus();
-      setLoading(false);
-    }
-  }, 400);
+    sessionStorage.setItem('hd_token', resultado.token);
+    sessionStorage.setItem('hd_usuario', JSON.stringify(resultado.usuario));
+
+    const redirect = sessionStorage.getItem('hd_redirect') || '../dashboard/';
+    sessionStorage.removeItem('hd_redirect');
+    window.location.replace(redirect);
+
+  } catch (err) {
+    console.error('Erro no login:', err.message);
+    errorBox.textContent = 'Email ou senha inválidos: ' + err.message;
+    inputPass.value = '';
+    inputPass.focus();
+    setLoading(false);
+  }
 });
-
-// ── Funções ──
-function autenticar(username, password) {
-  return USUARIOS.find(u => u.username === username && u.password === password) || null;
-}
 
 function setLoading(on) {
   btnLogin.disabled = on;

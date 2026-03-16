@@ -6,6 +6,7 @@
 <title>Hidrauldiesel — Ordens de Serviço</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="hd-lista-os.css">
+<script src="../shared/hd-api.js"></script>
 <script src="../shared/hd-auth.js"></script>
 </head>
 <body>
@@ -43,6 +44,10 @@
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
       Comissionamento
     </a>
+        <a href="../historico/">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Histórico
+    </a>
     <div class="nav-section">Integração</div>
     <button class="btn-sync" onclick="sincronizarBling()">
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -67,25 +72,25 @@
 
   <div class="content">
     <div class="stats">
-<div class="stat-card">
+      <div class="stat-card">
         <div class="stat-label">Aprovados</div>
-        <div class="stat-value" style="color:#22C55E">3</div>
+        <div class="stat-value" id="stat-aprovados" style="color:#22C55E">—</div>
         <div class="stat-sub">aguardando execução</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Em Execução</div>
-        <div class="stat-value" style="color:#EAB308">5</div>
-        <div class="stat-sub">2 aguard. peças</div>
+        <div class="stat-value" id="stat-em-execucao" style="color:#EAB308">—</div>
+        <div class="stat-sub" id="stat-em-execucao-sub"></div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Finalizadas hoje</div>
-        <div class="stat-value" style="color:#DC2626">4</div>
-        <div class="stat-sub">↑ 1 a mais que ontem</div>
+        <div class="stat-value" id="stat-finalizadas-hoje" style="color:#F97316">—</div>
+        <div class="stat-sub">encerradas no dia</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Faturado hoje</div>
-        <div class="stat-value">R$&thinsp;3,4k</div>
-        <div class="stat-sub">meta: R$ 5.000</div>
+        <div class="stat-value" id="stat-faturado-hoje">—</div>
+        <div class="stat-sub">OS encerradas hoje</div>
       </div>
     </div>
 
@@ -115,64 +120,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody id="os-tbody">
-          <tr data-status="orcamento">
-            <td><span class="os-num">#ORC-031</span></td>
-            <td><div class="cliente-nome">André Costa</div><div class="cliente-veiculo">Sandero 2018 — STU-3344</div></td>
-                        <td><span class="badge badge-orcamento">Orçamento</span></td>
-            <td class="date-cell">12/03/2026</td>
-            <td class="valor" style="color:var(--orcamento)">R$ 540,00</td>
-            <td style="text-align:right"><button class="action-btn">Ver</button></td>
-          </tr>
-          <tr data-status="em-execucao">
-            <td><span class="os-num">#0089</span></td>
-            <td><div class="cliente-nome">Carlos Mendonça</div><div class="cliente-veiculo">Civic 2021 — ABC-1234</div></td>
-                        <td><span class="badge badge-em-execucao">Em Execução</span></td>
-            <td class="date-cell">12/03/2026</td>
-            <td class="valor">R$ 420,00</td>
-            <td style="text-align:right"><button class="action-btn">Ver</button></td>
-          </tr>
-          <tr data-status="aprovado">
-            <td><span class="os-num">#0088</span></td>
-            <td><div class="cliente-nome">Fernanda Lopes</div><div class="cliente-veiculo">Gol 2019 — DEF-5678</div></td>
-                        <td><span class="badge badge-aprovado">Aprovado pelo Cliente</span></td>
-            <td class="date-cell">12/03/2026</td>
-            <td class="valor">R$ 310,00</td>
-            <td style="text-align:right"><button class="action-btn">Ver</button></td>
-          </tr>
-          <tr data-status="encerrada">
-            <td><span class="os-num">#0087</span></td>
-            <td><div class="cliente-nome">Renato Alves</div><div class="cliente-veiculo">HB20 2022 — GHI-9012</div></td>
-                        <td><span class="badge badge-encerrada">Encerrada</span></td>
-            <td class="date-cell">11/03/2026</td>
-            <td class="valor">R$ 870,00</td>
-            <td style="text-align:right"><button class="action-btn">Ver</button></td>
-          </tr>
-          <tr data-status="encerrada">
-            <td><span class="os-num">#0086</span></td>
-            <td><div class="cliente-nome">Patrícia Souza</div><div class="cliente-veiculo">Corolla 2020 — JKL-3456</div></td>
-                        <td><span class="badge badge-encerrada">Encerrada</span></td>
-            <td class="date-cell">11/03/2026</td>
-            <td class="valor">R$ 180,00</td>
-            <td style="text-align:right"><button class="action-btn">Ver</button></td>
-          </tr>
-          <tr data-status="em-execucao">
-            <td><span class="os-num">#0085</span></td>
-            <td><div class="cliente-nome">Marcos Pereira</div><div class="cliente-veiculo">Strada 2023 — MNO-7890</div></td>
-                        <td><span class="badge badge-em-execucao">Em Execução</span></td>
-            <td class="date-cell">11/03/2026</td>
-            <td class="valor">R$ 650,00</td>
-            <td style="text-align:right"><button class="action-btn">Ver</button></td>
-          </tr>
-          <tr data-status="cancelada">
-            <td><span class="os-num">#0084</span></td>
-            <td><div class="cliente-nome">Lucia Ferreira</div><div class="cliente-veiculo">Kwid 2021 — PQR-1122</div></td>
-                        <td><span class="badge badge-cancelada">Cancelada</span></td>
-            <td class="date-cell">10/03/2026</td>
-            <td class="valor">R$ 0,00</td>
-            <td style="text-align:right"><button class="action-btn">Ver</button></td>
-          </tr>
-        </tbody>
+        <tbody id="os-tbody"></tbody>
       </table>
       <div class="pagination">
         <span id="os-count">Mostrando 7 de 89 ordens</span>
